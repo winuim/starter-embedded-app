@@ -7,6 +7,8 @@ import Cookies from "js-cookie";
 import "@shopify/polaris/styles.css";
 import translations from "@shopify/polaris/locales/en.json";
 
+declare var API_KEY: string;
+
 const client = new ApolloClient({
   fetchOptions: {
     credentials: "include"
@@ -15,7 +17,7 @@ const client = new ApolloClient({
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
-    const shopOrigin = Cookies.get("shopOrigin");
+    const shopOrigin = Cookies.get("shopOrigin") ?? "error";
     return (
       <Container>
         <AppProvider i18n={translations}>

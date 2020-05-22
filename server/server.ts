@@ -7,15 +7,17 @@ import Koa from "koa";
 import next from "next";
 import Router from "koa-router";
 import session from "koa-session";
-import * as handlers from "./handlers/index";
+// import * as handlers from "./handlers/index";
 dotenv.config();
-const port = parseInt(process.env.PORT, 10) || 8081;
+const port = parseInt(process.env.PORT || '8081', 10);
 const dev = process.env.NODE_ENV !== "production";
 const app = next({
   dev
 });
 const handle = app.getRequestHandler();
-const { SHOPIFY_API_SECRET, SHOPIFY_API_KEY, SCOPES } = process.env;
+const SHOPIFY_API_SECRET = process.env.SHOPIFY_API_SECRET ?? "error";
+const SHOPIFY_API_KEY = process.env.SHOPIFY_API_KEY ?? "error";
+const SCOPES = process.env.SCOPES ?? "error";
 app.prepare().then(() => {
   const server = new Koa();
   const router = new Router();
@@ -38,7 +40,8 @@ app.prepare().then(() => {
       async afterAuth(ctx) {
         //Auth token and shop available in session
         //Redirect to shop upon auth
-        const { shop, accessToken } = ctx.session;
+        const shop = ctx.session?.shop;
+        // const accessToken = ctx.session?.accessToken;
         ctx.cookies.set("shopOrigin", shop, {
           httpOnly: false,
           secure: true,
