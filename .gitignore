@@ -19,5 +19,6 @@ config/tunnel.pid
 
 # next build output
 .next/
+dist/
 
 .npmrc
